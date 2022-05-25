@@ -12,7 +12,7 @@ const AvailableAppointments = ({ date }) => {
 
   const formattedDate = format(date, 'PP');
   //  fetch using react query 
-
+  // function to solve reactquery fetch problem 
   const fetchData = async (formattedDate) => {
     try {
       const URL = `http://localhost:5000/available/?date=${formattedDate}`;
@@ -22,8 +22,7 @@ const AvailableAppointments = ({ date }) => {
       console.log(error);
     }
   }
-  const { data: services, isLoading } = useQuery('available', () => fetchData(formattedDate))
-
+  const { data: services, isLoading, refetch } = useQuery(['available', formattedDate], () => fetchData(formattedDate))
 
   if (isLoading) {
     return <Loading></Loading>;
@@ -45,7 +44,7 @@ const AvailableAppointments = ({ date }) => {
       </div>
 
       {
-        treatment && <BookingModal treatment={treatment} setTreatment={setTreatment} date={date} />
+        treatment && <BookingModal treatment={treatment} setTreatment={setTreatment} date={date} refetch={refetch} />
       }
     </div>
   );
